@@ -1,0 +1,148 @@
+"""import streamlit as st
+import requests
+import time
+
+API="http://127.0.0.1:8001"
+
+st.set_page_config(page_title="AI Data Quality Engine",layout="wide")
+
+# ---------- SAFE REQUESTS ----------
+def safe_get(url):
+    try:
+        return requests.get(url, timeout=3).json()
+    except:
+        return None
+
+def safe_post(url, files=None):
+    try:
+        return requests.post(url, files=files, timeout=10)
+    except:
+        return None
+
+# ---------- UI ----------
+st.title("AI Data Quality Engine")
+
+file = st.file_uploader("Upload CSV or Excel", type=["csv","xlsx","xls"])
+
+if st.button("Start Cleaning") and file:
+    safe_post(f"{API}/upload", files={"file":(file.name,file.getvalue())})
+    st.rerun()
+
+job_data = safe_get(f"{API}/job")
+
+if job_data is None:
+    st.error("Backend not running")
+    st.stop()
+
+if not job_data:
+    st.info("Upload dataset to start")
+else:
+    jid,job=list(job_data.items())[0]
+
+    st.subheader(job.get("filename","Dataset"))
+
+    if job["status"]=="processing":
+        st.progress(50)
+        st.warning("Imputing intelligently…")
+        time.sleep(0.8)
+        st.rerun()
+
+    if job["status"]=="completed":
+
+        st.success(f"Completed in {job['duration']}s")
+        st.metric("Quality Score", f"{job['score']}%")
+
+        st.markdown(f"[Download Cleaned File]({API}/download/{jid})")
+
+        c1,c2=st.columns(2)
+
+        with c1:
+            st.markdown("### Before")
+            st.json(job["before"])
+
+        with c2:
+            st.markdown("### After")
+            st.json(job["after"])
+
+        st.markdown("### Imputation Strategies")
+        st.json(job["actions"])
+
+        st.markdown("### Values Imputed")
+        st.json(job["imputed"])
+"""
+import streamlit as st
+import requests
+import time
+import pandas as pd
+
+API="http://127.0.0.1:8001"
+
+def safe_get(url):
+    try:
+        return requests.get(url, timeout=3).json()
+    except:
+        return None
+
+def safe_post(url, files=None):
+    try:
+        return requests.post(url, files=files, timeout=10)
+    except:
+        return None
+
+st.set_page_config(page_title="AI Data Quality Engine",layout="wide")
+st.title("AI Data Quality Engine")
+
+file = st.file_uploader("Upload CSV or Excel", type=["csv","xlsx","xls"])
+
+if st.button("Start Cleaning") and file:
+    safe_post(f"{API}/upload", files={"file":(file.name,file.getvalue())})
+    st.rerun()
+
+job_data = safe_get(f"{API}/job")
+
+if job_data is None:
+    st.error("Backend not running")
+    st.stop()
+
+if not job_data:
+    st.info("Upload dataset to start")
+else:
+    jid,job=list(job_data.items())[0]
+
+    st.subheader(job.get("filename","Dataset"))
+
+    if job["status"]=="processing":
+        st.progress(50)
+        st.warning("Processing…")
+        time.sleep(0.8)
+        st.rerun()
+
+    if job["status"]=="completed":
+
+        q = job["quality"]
+
+        c1,c2,c3,c4 = st.columns(4)
+        c1.metric("Overall", f"{q['overall']}%")
+        c2.metric("Completeness", f"{q['completeness']}%")
+        c3.metric("Uniqueness", f"{q['uniqueness']}%")
+        c4.metric("Validity", f"{q['validity']}%")
+
+        st.markdown("### Cleaned Data Preview")
+        st.dataframe(pd.DataFrame(job["preview"]))
+
+        st.markdown("### Column Types")
+        st.json(job["types"])
+
+        st.markdown("### Cleaning Actions")
+        actions_df = pd.DataFrame(job["actions"], columns=["Column","Type","Strategy"])
+        st.dataframe(actions_df)
+
+        st.markdown("### Downloads")
+        d1,d2 = st.columns(2)
+        d1.markdown(f"[Download Excel]({API}/download/{jid}/xlsx)")
+        d2.markdown(f"[Download CSV]({API}/download/{jid}/csv)")
+
+        st.markdown("### Before vs After")
+        b,a = st.columns(2)
+        b.json(job["before"])
+        a.json(job["after"])
