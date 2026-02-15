@@ -1,57 +1,42 @@
 # AI Data Cleaning Tool
 
-**Automatic CSV & Excel Data Cleaning Tool**
+AI-powered data cleaning and quality engine that automatically profiles, standardizes, imputes, and prepares CSV/Excel datasets for analytics and machine learning workflows.
 
-AI Data Quality Engine is an automated data cleaning and preprocessing tool that profiles datasets, detects anomalies, imputes missing values, and generates analysis-ready CSV or Excel files instantly.
-
-Upload messy data → get clean, standardized datasets in seconds.
+Upload messy data → get clean, analysis-ready datasets in seconds.
 
 ---
 
-## Features
+## 🚀 Features
 
-- Automatic data profiling  
-- Missing value imputation  
-- Anomaly detection  
-- Data quality scoring  
-- CSV & Excel export  
-- Column type detection  
-- Smart normalization  
-
----
-
-## Use Cases
-
-- Data analysts cleaning datasets  
-- Data science preprocessing  
-- ETL data preparation  
-- Data quality automation  
-- CSV & Excel standardization  
+- Automatic dataset profiling (missing values, duplicates, types)
+- Context-aware smart imputation (numeric, categorical, dates, booleans)
+- Anomaly detection for suspicious values
+- Data quality scoring (completeness, uniqueness, validity)
+- Identifier-safe cleaning logic
+- Cleaned CSV / Excel export
+- Interactive preview and cleaning report
+- FastAPI backend + Streamlit UI
+- SaaS-style web interface
 
 ---
+## ⚙️ Tech Stack
 
-## Tech Stack
+- Python
+- Pandas
+- FastAPI
+- Streamlit
+- NumPy
 
-- FastAPI  
-- Pandas  
-- NumPy  
-- Streamlit  
-- Python  
 
----
+## 🧠 Why this matters
 
-## Run Locally
-
-Backend:
-
-uvicorn app.main:app --port 8001
-Frontend:
-
-streamlit run streamlit_app.py
-
+Data analysts spend up to 80% of their time cleaning data before analysis.  
+This tool automates preparation pipelines similar to modern data platforms.
 
 ---
+## 🏗️ Architecture
 
-## Keywords
+Upload → FastAPI API → Profiling → Smart Imputation → Quality Scoring → Export → Streamlit UI
 
-data cleaning tool, data quality tool, CSV cleaner, Excel cleaner, data preprocessing tool, data imputation, data imputation, data preparation automation
+## 🏗️ Architecture
+
