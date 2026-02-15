@@ -38,5 +38,4 @@ This tool automates preparation pipelines similar to modern data platforms.
 
 Upload → FastAPI API → Profiling → Smart Imputation → Quality Scoring → Export → Streamlit UI
 
-## 🏗️ Architecture
 
