@@ -5,35 +5,55 @@ import time
 
 API = "https://ai-data-cleaning-tool.onrender.com"
 
-# ---------- PAGE ----------
 st.set_page_config(page_title="AI Data Cleaning Tool", layout="wide")
 
 # ---------- GLOBAL STYLE ----------
 st.markdown("""
 <style>
+
+/* base */
 html, body, [class*="css"] {
     font-family: Inter, sans-serif;
     background:#030712;
     color:#e2e8f0;
 }
 
-/* remove streamlit chrome */
-header {visibility:hidden;}
-footer {visibility:hidden;}
-#MainMenu {visibility:hidden;}
+/* remove ALL streamlit borders & lines */
+section.main > div {
+    border:none !important;
+}
 
-/* container spacing */
+[data-testid="stHorizontalBlock"] > div {
+    border:none !important;
+}
+
+hr {
+    display:none;
+}
+
 .block-container {
     padding-top:2rem;
+}
+
+/* remove dataframe grid lines */
+[data-testid="stDataFrame"] table {
+    border-collapse:separate !important;
+    border-spacing:0 !important;
+}
+
+[data-testid="stDataFrame"] th,
+[data-testid="stDataFrame"] td {
+    border:none !important;
 }
 
 /* glass card */
 .glass {
     background: rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.06);
     border-radius:18px;
     padding:22px;
     backdrop-filter: blur(10px);
+    margin-bottom:24px;
 }
 
 /* gradient button */
@@ -44,7 +64,7 @@ footer {visibility:hidden;}
     border-radius:999px;
     padding:10px 28px;
     font-weight:600;
-    transition:.2s;
+    transition:.25s;
 }
 .stButton>button:hover {
     transform:translateY(-1px);
@@ -54,17 +74,23 @@ footer {visibility:hidden;}
 /* metrics */
 .metric {
     background: rgba(255,255,255,0.03);
-    border:1px solid rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.06);
     border-radius:16px;
-    padding:16px;
+    padding:18px;
     text-align:center;
 }
 
-/* table */
-[data-testid="stDataFrame"] {
-    border-radius:16px;
-    overflow:hidden;
+/* remove json borders */
+[data-testid="stJson"] {
+    background: transparent !important;
+    border:none !important;
 }
+
+/* remove container lines */
+div[data-testid="stVerticalBlock"] > div {
+    border:none !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -85,7 +111,7 @@ smart imputation and quality scoring.
 </p>
 """, unsafe_allow_html=True)
 
-# ---------- SAFE REQUEST ----------
+# ---------- REQUEST ----------
 def safe_get(url):
     try:
         return requests.get(url, timeout=3).json()
@@ -102,8 +128,8 @@ def safe_post(url, files=None):
 st.markdown("<div class='glass'>", unsafe_allow_html=True)
 file = st.file_uploader("Upload CSV or Excel", type=["csv","xlsx","xls"])
 
-col_center = st.columns([1,2,1])[1]
-with col_center:
+center = st.columns([1,2,1])[1]
+with center:
     start = st.button("Start Cleaning")
 
 st.markdown("</div>", unsafe_allow_html=True)
@@ -125,7 +151,7 @@ if not job_data:
 
 jid, job = list(job_data.items())[0]
 
-# ---------- PROCESSING ----------
+# ---------- PROCESS ----------
 if job["status"] == "processing":
     st.markdown("<div class='glass'>", unsafe_allow_html=True)
     st.progress(50)
@@ -139,7 +165,6 @@ if job["status"] == "completed":
 
     q = job["quality"]
 
-    # metrics
     m1,m2,m3,m4 = st.columns(4)
     with m1:
         st.markdown(f"<div class='metric'><b>Overall</b><br>{q['overall']}%</div>", unsafe_allow_html=True)
@@ -165,8 +190,8 @@ if job["status"] == "completed":
     # actions
     st.markdown("<div class='glass'>", unsafe_allow_html=True)
     st.subheader("Cleaning Actions")
-    actions_df = pd.DataFrame(job["actions"], columns=["Column","Type","Strategy"])
-    st.dataframe(actions_df, use_container_width=True)
+    df = pd.DataFrame(job["actions"], columns=["Column","Type","Strategy"])
+    st.dataframe(df, use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
     # downloads
