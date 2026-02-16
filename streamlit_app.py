@@ -3,7 +3,7 @@ import requests
 import time
 import pandas as pd
 
-API = "http://127.0.0.1:8001"
+API ="https://ai-data-cleaning-tool.onrender.com"
 
 # ---------- SESSION ----------
 if "active_job" not in st.session_state:
