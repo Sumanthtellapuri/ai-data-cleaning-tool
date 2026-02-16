@@ -60,7 +60,7 @@ section.main > div {
     text-decoration:none;
 }
 .primary-btn:hover {
-    background:#1d4ed8;
+    background:#fffff;
 }
 
 /* METRIC */
