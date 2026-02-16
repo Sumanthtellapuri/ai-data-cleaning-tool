@@ -40,7 +40,7 @@ font-weight:700;
 color:#94a3b8;
 }
 .primary-btn{
-background:linear-gradient(90deg,#6366f1,#06b6d4);
+background:linear-gradient(90deg,#6366f1,#000000);
 padding:14px 34px;
 border-radius:999px;
 color:white;
