@@ -51,7 +51,7 @@ section.main > div {
 
 /* BUTTON */
 .primary-btn {
-    background:#2563eb;
+    background:#111827;
     border:none;
     color:white;
     padding:10px 22px;
