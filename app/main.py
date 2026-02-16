@@ -18,6 +18,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/")
+def root():
+    return {"status": "AI Data Cleaning API running"}
 
 UPLOAD_DIR = "uploads"
 CLEANED_DIR = "cleaned"
